@@ -65,4 +65,23 @@ ggplot(data = NK92mi_4, aes(x= E_T_ratio_4, y= Percentage_dying_4, group=1))+
   theme(text = element_text(size=20), 
         panel.grid.major.x = element_blank())
 
+## Integrating line graph of hEPSC-NK and NK92mi 
+### Total gating ones are used 
+ID_5 <-c(1:8)
+Percentage_dying_5 <- c(Percentage_dying_3, Percentage_dying_4)
+E_T_ratio_5 <- c(E_T_ratio_3, E_T_ratio_4)
+Group <- c(rep("hEPSC-NK", 4), rep("NK92mi", 4))
+
+Data_sheet <- data.frame(ID, Group, E_T_ratio_5, Percentage_dying_5)
+
+ggplot(Data_sheet, aes(x= E_T_ratio_5, y= Percentage_dying_5, color = Group))+
+  geom_line()+
+  geom_point()+
+  scale_x_continuous("Effector: Target")+
+  ylab("Percentage of dying cells(%)")+
+  theme_classic()+
+  scale_y_continuous(expand= c(0.1,0.1))+
+  theme(text = element_text(size=20), 
+        panel.grid = element_blank())
+
 
