@@ -1,0 +1,1003 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>sgRNA seq</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="2a335ffa-8e0d-4c0f-a6e8-e06ce38cb6f1" class="page sans"><header><h1 class="page-title">sgRNA seq</h1></header><div class="page-body"><figure id="dffa1286-ac00-4bfd-98b4-0404e1145fdc" class="link-to-page"><a href="https://www.notion.so/Seurat-dffa1286ac004bfd98b40404e1145fdc">Seurat </a></figure><figure id="c3ede25a-b15a-4936-a914-031a9f5dcf4a" class="link-to-page"><a href="https://www.notion.so/Bioinformatics-c3ede25ab15a4936a914031a9f5dcf4a"><span class="icon">⌨️</span>Bioinformatics </a></figure><figure id="60375638-b67d-494a-862b-5b84f0cf75a0" class="link-to-page"><a href="https://www.notion.so/single-cell-rna-seq-60375638b67d494a862b5b84f0cf75a0">single cell rna seq </a></figure><h1 id="d868dd6d-7db2-4ad8-83f0-ed3bb4e2dba8" class="">Work flow of sgRNA seq data </h1><p id="dcc5cbb1-10f7-4ae4-91ed-7d6211a35cb5" class=""><strong>Data </strong><a href="https://www.nature.com/articles/s41467-021-24010-1">https://www.nature.com/articles/s41467-021-24010-1</a></p><div id="ebb7f70e-7faf-4786-8c28-4f94453a398f" class="column-list"><div id="6e8d15e8-4c30-4153-87d2-10966e959f8d" style="width:33.333333333333336%" class="column"><figure id="99efaa99-8614-4a73-92ab-16177699e6e4"><div class="source"><a href="sgRNA%20seq%2099efa/barcodes.tsv">https://s3-us-west-2.amazonaws.com/secure.notion-static.com/cfdbda85-0f79-4d05-9db3-1a60e5c02b23/barcodes.tsv</a></div></figure></div><div id="0e8ef6cd-81f0-415c-b3ff-76afef34fc0a" style="width:33.333333333333336%" class="column"><figure id="f0faee66-f989-4cb1-92d8-1b5931bde76b"><div class="source"><a href="sgRNA%20seq%2099efa/features.tsv">https://s3-us-west-2.amazonaws.com/secure.notion-static.com/256f3e3d-d440-45a2-8c0c-56d47c6c430e/features.tsv</a></div></figure></div><div id="e85e5d85-6a4d-443a-b763-42dcd95f61cc" style="width:33.33333333333333%" class="column"><figure id="1508964c-c8d4-47ae-9b58-daeab7c71ab5"><div class="source"><a href="sgRNA%20seq%2099efa/matrix.mtx">https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d69e01a4-bc02-46e2-a740-fdcfac2dfc40/matrix.mtx</a></div></figure></div></div><nav id="86aa6d1a-03a0-4f8d-9712-3f1b0aa677bb" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#d868dd6d-7db2-4ad8-83f0-ed3bb4e2dba8">Work flow of sgRNA seq data </a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#f17541ec-6f95-4c9c-9f3b-75cfbbdc8172">1. Construct <strong>gene count matrix </strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#5798e8a5-ca39-4b09-a553-97859bbb6ac3">2. Setup <strong>Seurat object </strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#e9157dd2-fb99-4c8d-aad3-4318d155b5d0">3. QC and filtering </a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#6c2d27ff-b187-49cc-8e64-506c277eaf08">4. Normalization </a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#b0153c0d-0eb4-403e-bd3d-1177b2c47aed">4. Identify highly variable features </a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#c7ede7e8-eeb4-4ab9-a877-45c54660ccd7">5. Scaling the data </a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#ce5dcc94-1bc2-40ab-8e20-bf2981856d11">6. Linear dimensional reduction （PCA）</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#50493af7-8a98-420d-8ebd-8030c95b4008">7. Finding statistically important dimensions </a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3ee30747-45f8-45a2-8273-024dd400f048">8. Non-linear dimension reduction</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#fa5a3007-dc0e-4b97-92ae-0c9cd2430d16">9. Identification of clusters markers </a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#65eeea07-91ed-4ed7-b84d-71139be7fc0c">10. Assign cell identity</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#a8c360e4-7303-4bba-8dd5-4be80f201487">Codes</a></div></nav><h3 id="f17541ec-6f95-4c9c-9f3b-75cfbbdc8172" class="">1. Construct <strong>gene count matrix </strong></h3><p id="9d1ee59c-0c3e-4b9d-95d2-e10ee1743a32" class="">The number of features (counts), the identity (features), and cell identity </p><ul id="74327887-5b46-4c60-8dc6-f67a2a797aaf" class="bulleted-list"><li style="list-style-type:disc">gene count matrix, cell matrix (cell barcode matrix), feature matrix <p id="d629d2da-014f-4463-b51c-3cc567d9a4a8" class="">matrix is saved as <strong>sparsematrix</strong> object, which is suited as lots of 0 </p><table id="b41f4669-8b14-4df3-b152-1c5e3a13c422" class="simple-table"><tbody><tr id="1ea601dd-5691-407a-8e03-158619e8be61"><td id="tiF{"></td><td id="VmSg">CB1</td><td id="Lk@f">CB2</td><td id="CvrV">CB3</td></tr><tr id="187fde28-6bdf-4c1b-8f86-c2a07e675235"><td id="tiF{">gene 1 </td><td id="VmSg">1</td><td id="Lk@f">0</td><td id="CvrV">7</td></tr><tr id="3acda77f-c66a-4af0-a010-61a86f505569"><td id="tiF{">gene 2 </td><td id="VmSg">4</td><td id="Lk@f">9</td><td id="CvrV">0 </td></tr></tbody></table></li></ul><ul id="51ef77e7-5fee-43e1-9e73-5c608188e996" class="toggle"><li><details open=""><summary>Code</summary><pre id="ace5dcaa-225e-4c1c-bd1f-d690d78970a0" class="code code-wrap"><code>mat &lt;- readMM(file = &quot;matrix.mtx&quot;) ##readMM function in pkg(Matrix)
+feature.names = read.delim(&quot;features.tsv&quot;, header = FALSE, stringsAsFactors = FALSE)
+barcode.names = read.delim(&quot;barcodes.tsv&quot;, header = FALSE, stringsAsFactors = FALSE) #Cell barcode 
+colnames(mat) = barcode.names $ V1 
+rownames(mat) = feature.names $ V2
+
+#examine selected gene in the first 30 cells 
+mat[c(&quot;CD3D&quot;, &quot;TCL1A&quot;, &quot;MS4A1&quot;,&quot;VPS13D&quot;), 1:30]</code></pre></details></li></ul><h3 id="5798e8a5-ca39-4b09-a553-97859bbb6ac3" class="">2. Setup <strong>Seurat object </strong></h3><ul id="3afea9eb-a55b-4275-bd1d-0951697fdf02" class="bulleted-list"><li style="list-style-type:disc"><a href="https://www.notion.so/Seurat-dffa1286ac004bfd98b40404e1145fdc">Seurat</a> obj contains both metadata and analysis </li></ul><ul id="9a0d7dbd-3272-4bd8-9cab-7fba08a1b81c" class="toggle"><li><details open=""><summary>Code</summary><pre id="d7777127-4398-40a0-917e-a760bae9b012" class="code code-wrap"><code># Create 
+sample &lt;- CreateSeuratObject(counts = mat, project = &quot;sample&quot;, min.cells = 3, min.features = 100)
+
+# Examine gene count table 
+sample[[&quot;RNA&quot;]]@counts </code></pre></details></li></ul><h3 id="e9157dd2-fb99-4c8d-aad3-4318d155b5d0" class="">3. QC and filtering </h3><figure id="b56e82ba-53e5-4ac8-a51d-c71dc84c2927"><a href="http://bioconductor.org/books/3.14/OSCA.basic/quality-control.html" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Chapter 1 Quality Control | Basics of Single-Cell Analysis with Bioconductor</div><div class="bookmark-description">Low-quality libraries in scRNA-seq data can arise from a variety of sources such as cell damage during dissociation or failure in library preparation (e.g., inefficient reverse transcription or PCR amplification). These usually manifest as &quot;cells&quot; with low total counts, few expressed genes and high mitochondrial or spike-in proportions.</div></div><div class="bookmark-href"><img src="http://bioconductor.org/favicon.ico" class="icon bookmark-icon"/>http://bioconductor.org/books/3.14/OSCA.basic/quality-control.html</div></div><img src="http://bioconductor.org/books/3.14/OSCA.basic/quality-control_files/figure-html/qc-dist-416b-1.png" class="bookmark-image"/></a></figure><ul id="feab777e-f2cf-4afd-92d7-2be7de922d14" class="bulleted-list"><li style="list-style-type:disc">QC metrics <ul id="391a5f0d-7c49-4be1-b851-30b8937b5472" class="bulleted-list"><li style="list-style-type:circle">The number of unique genes detected in each cell (nFeatures) <ul id="f6f9907d-ffd5-4a75-ae8f-f47342a1ea55" class="bulleted-list"><li style="list-style-type:square">empty deoplets/ low-quality cell → few genes </li></ul><ul id="d5491ea3-8694-47c5-97f6-43e3ef327732" class="bulleted-list"><li style="list-style-type:square">Cell doublets and multiplets → high gene </li></ul></li></ul><ul id="617813b5-761b-407a-bf4b-82603798c006" class="bulleted-list"><li style="list-style-type:circle">The number of total number of molecules </li></ul><ul id="919b5d3b-5935-419b-b16a-603d996341e5" class="bulleted-list"><li style="list-style-type:circle">The percentage of reads mapped to mitochondrial genome (percent.mt) <ul id="62bab21c-58f0-49d9-8ea5-81df30fee512" class="bulleted-list"><li style="list-style-type:square">low-quality / dying cells often exhibit extensive mitochondrial contamination</li></ul></li></ul><p id="5e4984eb-76b3-4b07-af91-fd5d6969056d" class="">→ cell with number of unique genes 200&lt; x &lt; 2500, &amp; mt.percentage &lt; 5% [from tutorial, not sure if suited for this dataset] </p></li></ul><ul id="42a17a55-88bc-49f0-821a-4a2c69b9066c" class="toggle"><li><details open=""><summary>Code </summary><pre id="18a5f58a-53ff-4c5f-86f5-1304ca6eb147" class="code code-wrap"><code># QC and selecting cells 
+# The [[ operator can add columns to object metadata. This is a great place to stash QC stats
+sample[[&quot;percent.mt&quot;]] &lt;- PercentageFeatureSet(sample, pattern = &quot;^MT-&quot;)
+# Show QC metrics for the first 5 cells
+head(sample@meta.data, 15) 
+ 
+# Visualize QC metrics 
+VlnPlot(sample, features = c(&quot;nFeature_RNA&quot;, &quot;nCount_RNA&quot;,  &quot;percent.mt&quot;), ncol=3)
+# FeatureScatter is typically used to visualize feature-feature relationships, but can be used
+# for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
+plot1 &lt;- FeatureScatter(sample, feature1 = &quot;nCount_RNA&quot;, feature2 = &quot;percent.mt&quot;)
+plot2 &lt;- FeatureScatter(sample, feature1 = &quot;nCount_RNA&quot;, feature2 = &quot;nFeature_RNA&quot;)
+plot1 + plot2
+
+# Filter 
+sample&lt;- subset(sample, nFeature_RNA &gt; 200 &amp; nFeature_RNA &lt;2500 &amp; percent.mt &lt;5 )
+#340 cells after filter only</code></pre></details></li></ul><div id="de22f07f-bedd-43f9-8b42-25005879ded1" class="column-list"><div id="e16d69a6-5ccf-4258-9ace-81b568985d20" style="width:50%" class="column"><figure id="7a3b1bc3-d9c6-46af-a0c3-d2ed0c458427" class="image"><a href="sgRNA%20seq%2099efa/QC_plot.png"><img style="width:693px" src="sgRNA%20seq%2099efa/QC_plot.png"/></a></figure></div><div id="c9edcb4f-43eb-49ac-87dd-f186ef52d169" style="width:50%" class="column"><figure id="48c02553-3422-452a-b07c-23060e1e98a3" class="image"><a href="sgRNA%20seq%2099efa/Untitled.png"><img style="width:726px" src="sgRNA%20seq%2099efa/Untitled.png"/></a></figure></div></div><div id="262f5518-c808-4db3-abee-0665ee16c3d5" class="column-list"><div id="f615dae4-9cec-4cbe-b6c3-2068bf16ae3c" style="width:50%" class="column"><figure id="bf269738-2d0b-4db3-9709-7bcc98232d1c" class="image"><a href="sgRNA%20seq%2099efa/Untitled%201.png"><img style="width:573px" src="sgRNA%20seq%2099efa/Untitled%201.png"/></a></figure></div><div id="227d91d8-99a9-4b63-829d-9a8cf629cc23" style="width:50%" class="column"><figure id="4f76ebce-4667-44ff-85a5-38759abcba50" class="image"><a href="sgRNA%20seq%2099efa/Untitled%202.png"><img style="width:862px" src="sgRNA%20seq%2099efa/Untitled%202.png"/></a></figure></div></div><h3 id="6c2d27ff-b187-49cc-8e64-506c277eaf08" class="">4. Normalization </h3><ul id="91a78990-1c2b-4dce-91fb-5c7abe2abb27" class="bulleted-list"><li style="list-style-type:disc">Gene counts are normalized<ul id="6b6c2d89-7083-4cdb-b310-7692f424a2c1" class="bulleted-list"><li style="list-style-type:circle">expression of each feature within each cell / total expression of tht feature <p id="b87123ed-5e1f-4112-8eed-3d282902690b" class="">→ scale (10,000 by default) </p><p id="282c9071-02a2-47f3-b247-ffb0d584d03a" class="">→ log transformation </p></li></ul><ul id="5f82fc30-005c-499a-9124-abca0e1a9a2c" class="bulleted-list"><li style="list-style-type:circle">Normalized values are stored in <code>pbmc[[&quot;RNA&quot;]]@data</code></li></ul></li></ul><ul id="98819347-4890-4a6c-a1cd-80606561c6e0" class="toggle"><li><details open=""><summary>code</summary><pre id="0d9baec7-72ea-427f-9506-32fac8adc880" class="code code-wrap"><code># default method
+sample &lt;- NormalizeData(sample, normalization.method=&quot;LogNormalize&quot;, scale.factor = 10000)</code></pre></details></li></ul><div id="fd7f7859-fa57-4e04-be70-d4a693f344ad" class="column-list"><div id="bc494f56-861a-46b9-8197-f5630d4f30b8" style="width:50%" class="column"><figure id="cbd37f09-55dc-46bb-b5c1-39e49ee33d3a" class="image"><a href="sgRNA%20seq%2099efa/Screenshot_2022-01-01_at_10.33.21_PM.png"><img style="width:612px" src="sgRNA%20seq%2099efa/Screenshot_2022-01-01_at_10.33.21_PM.png"/></a><figcaption>Not yet normalized 
+sample[[”RNA]]@counts</figcaption></figure></div><div id="41066c99-aa65-42d4-af73-48342e8020dd" style="width:50%" class="column"><figure id="1fd2a289-ca4d-4a57-9940-2058abaeb023" class="image"><a href="sgRNA%20seq%2099efa/Screenshot_2022-01-01_at_10.33.34_PM.png"><img style="width:896px" src="sgRNA%20seq%2099efa/Screenshot_2022-01-01_at_10.33.34_PM.png"/></a><figcaption>Normalized
+sample[[”RNA”]]@data</figcaption></figure></div></div><h3 id="b0153c0d-0eb4-403e-bd3d-1177b2c47aed" class="">4. Identify highly variable features </h3><ul id="daf7aa7d-b225-414d-a604-99bea7d38b63" class="bulleted-list"><li style="list-style-type:disc">features with high cell-to-cell variance (express high / low in some genes) <ul id="5d99d19e-7aba-4f8b-85ec-3b504953b534" class="bulleted-list"><li style="list-style-type:circle">focus on these features → more biologically relevant results </li></ul></li></ul><ul id="2b8048f3-fed2-4a1f-a80c-6359053cecc1" class="bulleted-list"><li style="list-style-type:disc">selection method: vst<figure id="18377493-3836-4870-a52b-8932ca72e2d3"><a href="https://www.cell.com/cell/fulltext/S0092-8674(19)30559-8?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0092867419305598%3Fshowall%3Dtrue" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Comprehensive Integration of Single-Cell Data</div><div class="bookmark-description">Seurat v3 identifies correspondences between cells in different experiments * These &quot;anchors&quot; can be used to harmonize datasets into a single reference * Reference labels and data can be projected onto query datasets * Extends beyond RNA-seq to single-cell protein, chromatin, and spatial data Recent advances in molecular biology, microfluidics, and computation have transformed the growing field of single-cell sequencing beyond routine transcriptomic profiling with single-cell RNA sequencing (scRNA-seq) (, , ).</div></div><div class="bookmark-href"><img src="https://www.cell.com/favicon.ico" class="icon bookmark-icon"/>https://www.cell.com/cell/fulltext/S0092-8674(19)30559-8?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0092867419305598%3Fshowall%3Dtrue</div></div><img src="http://els-jbs-prod-cdn.jbs.elsevierhealth.com/cms/attachment/a61e553c-d662-414a-be80-a043cbdf03c3/fx1.jpg" class="bookmark-image"/></a></figure></li></ul><ul id="a28cf2c6-66f1-4a2f-bb0d-164b1c67533a" class="bulleted-list"><li style="list-style-type:disc">default nfeatures: 2000 </li></ul><ul id="4a02cdda-796b-4bd6-bdf7-ab54771ceec3" class="toggle"><li><details open=""><summary>Code</summary><pre id="74209084-3148-48e5-9490-ddcc91d9f6c9" class="code code-wrap"><code>sample &lt;- FindVariableFeatures(sample, selection.method = &quot;vst&quot;, nfeatures = 2000)
+
+# Identify the top10 most highly variable genes 
+top10 &lt;- head(VariableFeatures(sample), 10)
+# plot variable features, w/t or w/o labels 
+plot1 &lt;- VariableFeaturePlot(sample) ### without labels 
+plot2 &lt;- LabelPoints(plot=plot1, points = top10, repel=T) ###repel = T to seperate labels from dots 
+plot1 + plot2</code></pre></details></li></ul><figure id="57afdd03-0e52-4bd7-ba50-b7b1640b0fa5" class="image"><a href="sgRNA%20seq%2099efa/Untitled%203.png"><img style="width:1115px" src="sgRNA%20seq%2099efa/Untitled%203.png"/></a></figure><h3 id="c7ede7e8-eeb4-4ab9-a877-45c54660ccd7" class="">5. Scaling the data </h3><ul id="ac0df030-ea40-44ef-83b3-10a1cbfd8834" class="bulleted-list"><li style="list-style-type:disc">linear transformation </li></ul><ul id="26ac35d9-4d4a-456a-b116-c106f42de92e" class="bulleted-list"><li style="list-style-type:disc">standard preprocessing b4 dimensional reduction <ul id="ec8156df-7f36-4dfc-9fcf-b6bb248e97f8" class="bulleted-list"><li style="list-style-type:circle">shift the expression of each genes <p id="2424865b-5d16-45a6-b0db-136c46ba2f6a" class="">→ mean expression across cell is 0 </p></li></ul><ul id="e8bd55fe-46df-40b7-8a64-ab83de37055d" class="bulleted-list"><li style="list-style-type:circle">Scale the expression of each gene <p id="4728bb2d-cbb3-4c4b-9411-a45e3592421b" class="">→ variance across cells is 1 </p></li></ul><p id="0ee7ede0-7e2d-494d-a93d-8fb047e45557" class="">Scaled data stored in <code>pbmc[[&quot;RNA&quot;]]@scale.data</code></p><ul id="40c8931b-c68e-4027-90e0-96d41cb8bb38" class="toggle"><li><details open=""><summary>Code </summary><pre id="c3afe5c3-6e6c-44f8-a0a3-cd01361589f0" class="code code-wrap"><code> all.genes &lt;- rownames (sample)
+sample &lt;- ScaleData(sample, features = all.genes)</code></pre></details></li></ul></li></ul><div id="38f77698-ae66-44f0-8c7e-df51ba67061b" class="column-list"><div id="e6acf458-70ed-485f-ab3a-ef30bf6be0d2" style="width:50%" class="column"><figure id="0ccb88e1-ecbd-4209-a60c-b2665f0b8c21" class="image"><a href="sgRNA%20seq%2099efa/Screenshot_2022-01-02_at_12.15.30_AM.png"><img style="width:1352px" src="sgRNA%20seq%2099efa/Screenshot_2022-01-02_at_12.15.30_AM.png"/></a></figure></div><div id="d111b16c-7872-4dfc-b227-87914a9d2553" style="width:50%" class="column"><figure id="35f428a9-c5a0-4dce-a32f-66fc8d4de1b7" class="image"><a href="sgRNA%20seq%2099efa/Screenshot_2022-01-02_at_12.18.15_AM.png"><img style="width:336px" src="sgRNA%20seq%2099efa/Screenshot_2022-01-02_at_12.18.15_AM.png"/></a></figure></div></div><h3 id="ce5dcc94-1bc2-40ab-8e20-bf2981856d11" class="">6. Linear dimensional reduction （PCA）</h3><ul id="4ab4bd1c-98de-4b75-8fd3-62c88db66e32" class="bulleted-list"><li style="list-style-type:disc">Principal Component Analysis <strong>PCA </strong>to reduce dimensions </li></ul><ul id="6654d2be-ec6f-4550-8aae-b149306fafc6" class="toggle"><li><details open=""><summary>Code</summary><pre id="aa5849e1-7127-416f-a0f3-b721ef298ac8" class="code code-wrap"><code>## only the previous determined data  ###limit to variable features by VariableFeatures()
+sample &lt;- RunPCA (sample, features = VariableFeatures(sample))
+
+sample[[&quot;pca&quot;]]
+# Examine first 5 dimensions 
+print(sample[[&quot;pca&quot;]], dims= 1:5, nfeatures = 5)</code></pre></details></li></ul><ul id="4523d64d-1c00-488b-9d99-514463e07e38" class="toggle"><li><details open=""><summary>Visualization of dimensions; code </summary><pre id="675f75e9-ce41-4f96-bad0-c8e2338ad2c8" class="code code-wrap"><code>###Visualize top genes associated with reduction components
+### first 2 dimensions, dimension reduction method is pca  
+VizDimLoadings(sample, dims = 1:5, reduction = &quot;pca&quot;)
+DimPlot(sample, reduction = &quot;pca&quot;) ###each point is a cell
+
+###Dimheatmap -&gt; decide which PCA to be included for further analysis 
+###Use heatmap to visualize the 
+DimHeatmap(sample, dims = 1, cells = 500, balanced = TRUE)
+DimHeatmap(sample, dims = 1:30, cells = 500, balanced = TRUE)</code></pre></details></li></ul><div id="453f2403-c9f3-4537-b853-7288bf5078a4" class="column-list"><div id="ca0ac9d5-1874-412c-b6f8-9a2103453405" style="width:50%" class="column"><figure id="8aa2b3c0-60c1-4cff-bc30-5047854b9131" class="image"><a href="sgRNA%20seq%2099efa/Untitled%204.png"><img style="width:750px" src="sgRNA%20seq%2099efa/Untitled%204.png"/></a></figure></div><div id="ec8766f5-1639-4011-ac62-0b3c1d9cab0e" style="width:50.000000000000014%" class="column"><figure id="5e05dd15-17e3-47f7-99b4-20c504a8ff3e" class="image"><a href="sgRNA%20seq%2099efa/Untitled%205.png"><img style="width:501px" src="sgRNA%20seq%2099efa/Untitled%205.png"/></a></figure></div></div><figure id="6a405d0e-7bb2-4740-acf5-c656f4cb8033" class="image"><a href="sgRNA%20seq%2099efa/Untitled%206.png"><img style="width:785px" src="sgRNA%20seq%2099efa/Untitled%206.png"/></a></figure><h3 id="50493af7-8a98-420d-8ebd-8030c95b4008" class="">7. Finding statistically important dimensions </h3><ul id="19a10a65-9a6c-479d-ab7f-62eab8e6b9ae" class="bulleted-list"><li style="list-style-type:disc">using JackStraw method <ul id="300266e9-b099-4401-9b3f-b3ae9c1a1f2a" class="bulleted-list"><li style="list-style-type:circle">creat null distribution by permuting a subset of data </li></ul><ul id="4b700bf8-7e64-4730-9281-9ae3162ea678" class="bulleted-list"><li style="list-style-type:circle">identify low p-value PCs </li></ul><ul id="2d97cb1e-03ce-4e00-8b2d-34e29cb5bfb8" class="toggle"><li><details open=""><summary>Code</summary><pre id="b65bc73c-4fd6-4262-ad6b-c1895d791c54" class="code code-wrap"><code>#Determine the dimensionality 
+# NOTE: This process can take a long time for big datasets, comment out for expediency. More
+# approximate techniques such as those implemented in ElbowPlot() can be used to reduce
+# computation time
+sample &lt;- JackStraw(sample, num.replicate = 100, dims = 30) #default max dimensions is 20, dims = X to increase dimensionality 
+sample &lt;- ScoreJackStraw(sample, dims = 1:30)
+JackStrawPlot(sample, dims = 1:15) 
+ElbowPlot(sample) #  ranking of principle components based on the percentage of variance explained by each one
+##PCA 1-15</code></pre></details></li></ul></li></ul><div id="006a3719-c27e-4f35-b6f3-d7306ea91dd3" class="column-list"><div id="5193fb16-77ff-483f-982c-abfd5a3e7754" style="width:50%" class="column"><figure id="6ecd2126-0f93-4f21-aeaa-5e3b2016e312" class="image"><a href="sgRNA%20seq%2099efa/Untitled%207.png"><img style="width:883px" src="sgRNA%20seq%2099efa/Untitled%207.png"/></a></figure></div><div id="15bb659f-0f39-4286-acbd-0fc384f1e4c1" style="width:50%" class="column"><figure id="432a70e4-d7d8-4b63-baf6-a132f6f4edaf" class="image"><a href="sgRNA%20seq%2099efa/Untitled%208.png"><img style="width:871px" src="sgRNA%20seq%2099efa/Untitled%208.png"/></a></figure></div></div><p id="48ce4bee-025d-4182-8368-070a0e60fcb1" class="">
+</p><h3 id="3ee30747-45f8-45a2-8273-024dd400f048" class="">8. Non-linear dimension reduction</h3><ul id="5664fbe5-7c69-4f82-9638-18955f828abd" class="bulleted-list"><li style="list-style-type:disc">t-distributed stochastic neighbour embedding <strong>(t-SNE )</strong><ul id="df1319a9-67ff-4d1d-bd20-036c5175d9aa" class="bulleted-list"><li style="list-style-type:disc">resolution (1.2 from the paper) </li></ul></li></ul><ul id="c2adf688-a0ed-4245-be45-b4c6c507afb3" class="toggle"><li><details open=""><summary>Code</summary><pre id="a3abe13b-e593-4caf-95ac-b1e1d7a9aba6" class="code code-wrap"><code>#Clustering #using the first 15 dimensions 
+sample &lt;- FindNeighbors(sample, dims = 1:15)
+sample &lt;- FindClusters(sample, resolution = 1.2)
+## Look at cluster IDs of the first 5 cells
+head(Idents(sample),5)
+
+#non-linear dimensional reduction 
+#tSNE, UMAP 
+sample &lt;- RunUMAP (sample, dims= 1:15)
+# note that you can set `label = TRUE` or use the LabelClusters function to help label
+DimPlot(sample, reduction = &quot;umap&quot;, label = T)</code></pre></details></li></ul><p id="af98541e-8a15-4cf8-a425-8a904b88a5cb" class=""> </p><figure id="49d4c498-df7b-4349-837c-a9bc6b797219" class="image"><a href="sgRNA%20seq%2099efa/Untitled%209.png"><img style="width:658px" src="sgRNA%20seq%2099efa/Untitled%209.png"/></a><figcaption>annotation of clusters required subsequent assigning of cell identity</figcaption></figure><p id="d85a3337-3dc8-4ff0-9e60-abb38cfc03cf" class="">
+</p><h3 id="fa5a3007-dc0e-4b97-92ae-0c9cd2430d16" class="">9. Identification of clusters markers </h3><ul id="18ad9bc2-451e-4949-8f93-2edd6a71e5b3" class="bulleted-list"><li style="list-style-type:disc">Visualization bt <ul id="e698573f-5316-41a3-8b7d-6a1d598d2bdf" class="bulleted-list"><li style="list-style-type:circle">Violin plot </li></ul><ul id="f9ca99b9-dd87-4869-9fd1-47d3f0b43048" class="bulleted-list"><li style="list-style-type:circle">Feature plot </li></ul><ul id="0c9e996d-f475-47de-9583-9172326d8465" class="bulleted-list"><li style="list-style-type:circle">heatmap </li></ul></li></ul><ul id="0f41de34-91b6-4049-90d0-8df66f0567d6" class="toggle"><li><details open=""><summary>Code </summary><pre id="a84a8ea5-5089-45d2-8197-d5dcb1890971" class="code code-wrap"><code># Finding cluster biomarkers 
+# find all markers in cluster 2 
+### ident.1 = X , X= cluster of interest 
+### min.pct = X, the min. % of a feature to be dectected 
+cluster2.markers &lt;- FindMarkers(sample, ident.1 = 2, min.pct = 0.25)
+head(cluster2.markers, n=5)
+# find all markers distinguishing cluster 5 from cluster 0 and cluster 3 
+cluster5.markers &lt;- FindMarkers(sample, ident.1 = 5, ident.2 = c(0, 3), min.pct = 0.25)
+head(cluster5.markers, n = 5)
+#find markers for ebery clusters compared with all remaining cells, 
+#report the positive ones only 
+sample.markers &lt;- FindAllMarkers(sample, only.pos = T, min.pct = 0.25, logfc.threshold = 0.25)
+sample.markers %&gt;%
+  group_by(cluster) %&gt;%
+  slice_max(n=2, order_by = avg_log2FC)
+
+# The difference between roc and default 
+cluster0.markers &lt;- FindMarkers(sample, ident.1 = 0, logfc.threshold = 0.25, test.use = &quot;roc&quot;, only.pos = TRUE)
+&gt; cluster.0.1.markers &lt;- FindMarkers(sample, ident.1 = 0, logfc.threshold = 0.25, only.pos = T)
+
+# Visualize markers 
+# Violin plot 
+VlnPlot(sample, features = c(&quot;CD68&quot;))
+# raw counts 
+VlnPlot(sample, features = c(&quot;CD68&quot;), slot = &quot;counts&quot;, log = TRUE)
+FeaturePlot(sample, features = &quot;VSIR&quot;)
+### heatmap (gene exp. in each clusters) 
+sample.markers %&gt;% 
+  group_by(cluster) %&gt;%
+  top_n(n=10, wt = avg_log2FC) -&gt; top10
+DoHeatmap(sample, features = top10$gene) + NoLegend()</code></pre></details></li></ul><p id="0a24dfc5-a5ba-4f5e-9b88-cba36ed59442" class="">
+</p><h3 id="65eeea07-91ed-4ed7-b84d-71139be7fc0c" class="">10. Assign cell identity</h3><ul id="e6dae83d-0530-4e57-84b3-59b0323b0f2c" class="bulleted-list"><li style="list-style-type:disc">use package (scSorter) <ul id="3e349c24-f61c-4022-ae33-32dcde488c12" class="bulleted-list"><li style="list-style-type:circle">need a csv with defined markers + weight (how confident you are) </li></ul><ul id="b43efba5-3da9-4f16-b96f-77f55319b160" class="toggle"><li><details open=""><summary>Code</summary><pre id="7f0c9309-49d1-42f8-9f67-b643a0ad6e56" class="code code-wrap"><code>#Assign cell identity to clusters 
+### Use scSorter 
+
+# load annotation file
+library(&quot;scSorter&quot;)
+anno &lt;- read.csv(file = &quot;tme_annotation.csv&quot;, header = TRUE )
+
+# Identify the 10 most highly variable genes
+topgenes &lt;- head(VariableFeatures(sample), 2000)
+expr = GetAssayData(sample)
+topgene_filter = rowSums(as.matrix(expr)[topgenes, ]!=0) &gt; ncol(expr)*.1
+topgenes = topgenes[topgene_filter]
+
+# At last, we subset the preprocessed expression data. Now, we are ready to run scSorter.
+picked_genes = unique(c(anno$Marker, topgenes))
+expr = expr[rownames(expr) %in% picked_genes, ]
+
+# run scSorter
+rts &lt;- scSorter(expr, anno)
+
+#The cell type assignment results are stored in the Pred_Type vector.
+print(table(rts$Pred_Type))
+
+# add label
+Idents(sample) = rts$Pred_Type
+#Plot for assigned identity of each cluster 
+DimPlot(sample, reduction = &quot;umap&quot;, split.by = &#x27;seurat_clusters&#x27;)</code></pre></details></li></ul></li></ul><ul id="a3c98fa7-ea95-484a-8bd6-422270b3ea84" class="bulleted-list"><li style="list-style-type:disc">use a pre-defined marker list  <ul id="dba70322-150f-4ed3-b9b2-3de029b2ab70" class="bulleted-list"><li style="list-style-type:circle">then manually pick genes and check expression in wt clusters </li></ul><ul id="4a216e12-dbd0-4326-93b6-0d8782aeb9c1" class="bulleted-list"><li style="list-style-type:circle">easy to miss </li></ul></li></ul><ul id="10885cc7-54cd-4ba3-a1fe-748a7f42b064" class="bulleted-list"><li style="list-style-type:disc">use database (atlas) <ul id="0cc9388b-72d5-4a26-8edd-70809ca824e5" class="bulleted-list"><li style="list-style-type:circle">cannot identify novel cell type </li></ul><p id="a1ff612d-00af-400b-9368-11d778572e7f" class=""><strong>Example </strong></p><ul id="4df77921-9e80-4329-88a4-bf4aea56ed01" class="bulleted-list"><li style="list-style-type:circle">can use SingleR <p id="20a5e017-a134-46b7-bc3f-ddca8836ebb1" class="">tutorial: </p><figure id="5ad75c4e-1ab8-4196-a3e3-042f9732bdc2"><a href="https://bioconductor.org/packages/devel/bioc/vignettes/SingleR/inst/doc/SingleR.html#2_Using_built-in_references" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Using SingleR to annotate single-cell RNA-seq data</div></div><div class="bookmark-href"><img src="https://bioconductor.org/favicon.ico" class="icon bookmark-icon"/>https://bioconductor.org/packages/devel/bioc/vignettes/SingleR/inst/doc/SingleR.html#2_Using_built-in_references</div></div></a></figure></li></ul><ul id="d7fdf8d6-715d-403a-944f-d2e76fc0abf9" class="toggle"><li><details open=""><summary>Code</summary><pre id="b89fc30b-11ba-4e2d-8eb9-de12005bab52" class="code code-wrap"><code>library(celldex) #reference 
+library(SingleR) #automatic annotation 
+library(SingleCellExperiment)
+library(scuttle)
+library(ggplot2) 
+library(scater) #for plotting heatmap 
+
+
+# import reference and prepare sample
+ref &lt;- HumanPrimaryCellAtlasData() #summarised experiment object 
+ref
+test &lt;- as.SingleCellExperiment(sample)
+test
+
+# run SingleR
+#test = ur data, ref = ur reference, labels = use the label in your reference 
+predictions &lt;- SingleR(test=test,ref=ref, assay.type.test=1, labels=ref$label.main)
+predictions_sg &lt;- SingleR(test = test, ref = ref, labels = ref$label.main, de.method = &quot;wilcox&quot;) #wired &quot;scran&quot; package required, but not mentioned in the tutorial 
+# Summarizing the distribution:
+table(predictions$pruned.labels)
+
+## add to your seuart obj metadata, just need pruned labels 
+sample &lt;- AddMetaData(object = sample, metadata = predictions@listData$pruned.labels, col.name = &#x27;cell_type&#x27;)
+Idents(sample) = predictions@listData$pruned.labels
+DimPlot(sample, reduction = &quot;umap&quot;)
+table(predictions@listData$pruned.labels)
+
+## Checking quality of predictions 
+plotScoreHeatmap(predictions)
+plotDeltaDistribution(predictions)
+summary(is.na(predictions$pruned.labels))
+
+all.markers &lt;- metadata(predictions)$de.genes
+test$labels &lt;- predictions$labels
+
+#Hepatocytes related markers 
+# seurat object doesn&#x27;t work, SingleCellExperiment works
+plotHeatmap(test, order_columns_by = &quot;labels&quot;, 
+            features = unique(unlist(all.markers$Hepatocytes)))</code></pre></details></li></ul><p id="688cc705-a118-40b3-8b44-d103e100567b" class="">
+</p></li></ul><h1 id="a8c360e4-7303-4bba-8dd5-4be80f201487" class="">Codes</h1><pre id="07b1f18c-151c-4294-9a12-508143b61904" class="code code-wrap"><code>library(dplyr)
+library(Seurat)
+library(patchwork)
+library(Matrix)
+
+setwd(&quot;/Users/angiepoon528/Desktop/FYP/RNA_seq/122030_data&quot;)
+
+#Workflow 
+# gene matrix (MM) -&gt; create Seurat obj -&gt; Preprocessing(QC) -&gt; Normalization 
+
+
+# construct matrix after cellranger
+##save gene count matrix as sparse matrix 
+mat &lt;- readMM(file = &quot;matrix.mtx&quot;) ##readMM function in pkg(Matrix)
+feature.names = read.delim(&quot;features.tsv&quot;, header = FALSE, stringsAsFactors = FALSE)
+barcode.names = read.delim(&quot;barcodes.tsv&quot;, header = FALSE, stringsAsFactors = FALSE) #Cell barcode 
+colnames(mat) = barcode.names $ V1 
+rownames(mat) = feature.names $ V2
+
+#examine selected gene in the first 30 cells 
+mat[c(&quot;CD3D&quot;, &quot;TCL1A&quot;, &quot;MS4A1&quot;,&quot;VPS13D&quot;), 1:30]
+
+
+# setup Seurat object with the raw data
+sample &lt;- CreateSeuratObject(counts = mat, project = &quot;sample&quot;, min.cells = 3, min.features = 100)
+sample
+sample[[&quot;RNA&quot;]]@counts
+###pre-processing is done by Yiming 
+
+# QC and selecting cells 
+# The [[ operator can add columns to object metadata. This is a great place to stash QC stats
+sample[[&quot;percent.mt&quot;]] &lt;- PercentageFeatureSet(sample, pattern = &quot;^MT-&quot;)
+# Show QC metrics for the first 5 cells
+head(sample@meta.data, 15) ###low quality, dying cells have extensive mitochondrial contamination 
+# Filter 
+# Visualize QC metrics 
+VlnPlot(sample, features = c(&quot;nFeature_RNA&quot;, &quot;nCount_RNA&quot;,  &quot;percent.mt&quot;), ncol=3)
+
+# FeatureScatter is typically used to visualize feature-feature relationships, but can be used
+# for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
+plot1 &lt;- FeatureScatter(sample, feature1 = &quot;nCount_RNA&quot;, feature2 = &quot;percent.mt&quot;)
+plot2 &lt;- FeatureScatter(sample, feature1 = &quot;nCount_RNA&quot;, feature2 = &quot;nFeature_RNA&quot;)
+plot1 + plot2
+
+sample&lt;- subset(sample, nFeature_RNA &gt; 200 &amp; nFeature_RNA &lt;2500 &amp; percent.mt &lt;5 )
+#340 cells after filter only 
+
+###Normalization 
+###syntex: 
+# log normalization: 
+# normalizes the feature expression measurements for each cell by the total expression, 
+# multiplies this by a scale factor (10,000 by default), and log-transforms the result.
+# default method
+sample &lt;- NormalizeData(sample, normalization.method=&quot;LogNormalize&quot;, scale.factor = 10000)
+head(sample[[&quot;RNA&quot;]]@data)
+sample[[&quot;RNA&quot;]]@counts
+
+# identify highly variable features (features with high cell-to-cell variance (i.e. DEG))
+### focusing on these genes -&gt; biological relevance 
+### vst selection method: https://www.cell.com/cell/fulltext/S0092-8674(19)30559-8?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0092867419305598%3Fshowall%3Dtrue
+### nfeatures: limit the number of features (i.e. top 2000 in this case)
+sample &lt;- FindVariableFeatures(sample, selection.method = &quot;vst&quot;, nfeatures = 2000)
+# Identify the top10 most highly variable genes 
+top10 &lt;- head(VariableFeatures(sample), 10)
+# plot variable features, w/t or w/o labels 
+plot1 &lt;- VariableFeaturePlot(sample) ### without labels 
+plot2 &lt;- LabelPoints(plot=plot1, points = top10, repel=T) ###repel = T to seperate labels from dots 
+plot1 + plot2 
+
+# Scaling the data 
+### standard pre-processing step prior to dimensional reduction techniques like PCA
+### Shifts the expression of each gene, so that the mean expression across cells is 0
+### Scales the expression of each gene, so that the variance across cells is 1
+### This step gives equal weight in downstream analyses, so that highly-expressed genes do not dominate
+##The results of this are stored in pbmc[[&quot;RNA&quot;]]@scale.data
+all.genes &lt;- rownames (sample)
+sample &lt;- ScaleData(sample, features = all.genes)
+sample[[&quot;RNA&quot;]]@scale.data
+sample[[&quot;RNA&quot;]]@data
+
+# dimension reduction by PCA
+## only the previous data  ###limit to variable features by VariableFeatures()
+sample &lt;- RunPCA (sample, features = VariableFeatures(sample))
+
+## Visualization of PCA 
+# Examine and visualize PCA results a few different ways
+###Examine the first 5 PCAs, with 5 genes 
+print(sample[[&quot;pca&quot;]], dims= 1:5, nfeatures = 5)# The [[ operator can add columns to object metadata. This is a great place to stash QC stats
+###Visualize top genes associated with reduction components
+### first 2 dimensions, dimension reduction method is pca  
+VizDimLoadings(sample, dims = 1:2, reduction = &quot;pca&quot;)
+DimPlot(sample, reduction = &quot;pca&quot;) ###each point is a cell 
+###Dimheatmap -&gt; decide which PCA to be included for further analysis 
+###Use heatmap to visualize the 
+DimHeatmap(sample, dims = 1, cells = 500, balanced = TRUE)
+DimHeatmap(sample, dims = 1:30, cells = 500, balanced = TRUE)
+
+#Determine the dimensionality 
+# NOTE: This process can take a long time for big datasets, comment out for expediency. More
+# approximate techniques such as those implemented in ElbowPlot() can be used to reduce
+# computation time
+sample &lt;- JackStraw(sample, num.replicate = 100, dims = 30) #default max dimensions is 20, dims = X to increase dimensionality 
+sample &lt;- ScoreJackStraw(sample, dims = 1:30)
+JackStrawPlot(sample, dims = 1:15) 
+ElbowPlot(sample) #  ranking of principle components based on the percentage of variance explained by each one
+##PCA 1-15 
+
+#Clustering #using the first 15 dimensions 
+sample &lt;- FindNeighbors(sample, dims = 1:15)
+sample &lt;- FindClusters(sample, resolution = 1.2)
+## Look at cluster IDs of the first 5 cells
+head(Idents(sample),5)
+
+#non-linear dimensional reduction 
+#tSNE, UMAP 
+sample &lt;- RunUMAP (sample, dims= 1:15)
+# note that you can set `label = TRUE` or use the LabelClusters function to help label
+DimPlot(sample, reduction = &quot;umap&quot;, label = T)
+
+# Finding cluster biomarkers 
+# find all markers in cluster 2 
+### ident.1 = X , X= cluster of interest 
+### min.pct = X, the min. % of a feature to be dectected 
+cluster2.markers &lt;- FindMarkers(sample, ident.1 = 2, min.pct = 0.25)
+head(cluster2.markers, n=5)
+# find all markers distinguishing cluster 5 from cluster 0 and cluster 3 
+cluster5.markers &lt;- FindMarkers(sample, ident.1 = 5, ident.2 = c(0, 3), min.pct = 0.25)
+head(cluster5.markers, n = 5)
+#find markers for ebery clusters compared with all remaining cells, 
+#report the positive ones only 
+sample.markers &lt;- FindAllMarkers(sample, only.pos = T, min.pct = 0.25, logfc.threshold = 0.25)
+sample.markers %&gt;%
+  group_by(cluster) %&gt;%
+  slice_max(n=2, order_by = avg_log2FC)
+
+# The difference between roc and default 
+cluster0.markers &lt;- FindMarkers(sample, ident.1 = 0, logfc.threshold = 0.25, test.use = &quot;roc&quot;, only.pos = TRUE)
+&gt; cluster.0.1.markers &lt;- FindMarkers(sample, ident.1 = 0, logfc.threshold = 0.25, only.pos = T)
+
+# Visualize markers 
+# Violin plot 
+VlnPlot(sample, features = c(&quot;CD68&quot;))
+# raw counts 
+VlnPlot(sample, features = c(&quot;CD68&quot;), slot = &quot;counts&quot;, log = TRUE)
+FeaturePlot(sample, features = &quot;VSIR&quot;)
+### heatmap (gene exp. in each clusters) 
+sample.markers %&gt;% 
+  group_by(cluster) %&gt;%
+  top_n(n=10, wt = avg_log2FC) -&gt; top10
+DoHeatmap(sample, features = top10$gene) + NoLegend()
+
+#Assign cell identity to clusters 
+### Use scSorter 
+
+# load annotation file
+library(&quot;scSorter&quot;)
+anno &lt;- read.csv(file = &quot;tme_annotation.csv&quot;, header = TRUE )
+
+# Identify the 10 most highly variable genes
+topgenes &lt;- head(VariableFeatures(sample), 2000)
+expr = GetAssayData(sample)
+topgene_filter = rowSums(as.matrix(expr)[topgenes, ]!=0) &gt; ncol(expr)*.1
+topgenes = topgenes[topgene_filter]
+
+# At last, we subset the preprocessed expression data. Now, we are ready to run scSorter.
+picked_genes = unique(c(anno$Marker, topgenes))
+expr = expr[rownames(expr) %in% picked_genes, ]
+
+# run scSorter
+rts &lt;- scSorter(expr, anno)
+
+#The cell type assignment results are stored in the Pred_Type vector.
+print(table(rts$Pred_Type))
+
+# add label
+Idents(sample) = rts$Pred_Type
+DimPlot(sample, reduction = &quot;umap&quot;, split.by = &#x27;seurat_clusters&#x27;)</code></pre><p id="19372fc2-1b50-4905-8d04-260159da76b1" class="">
+</p><p id="f4c9b83f-eb7b-475d-b258-fb39a5928cfc" class="">
+</p><p id="8e84893d-ad38-4a19-b0d4-722ca18e3153" class="">
+</p></div></article></body></html>
