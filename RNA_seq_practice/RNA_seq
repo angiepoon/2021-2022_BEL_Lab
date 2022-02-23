@@ -1,0 +1,225 @@
+library(dplyr)
+library(Seurat)
+library(patchwork)
+library(Matrix)
+
+setwd("/Users/angiepoon528/Desktop/FYP/RNA_seq/122030_data")
+
+#Workflow 
+# gene matrix (MM) -> create Seurat obj -> Preprocessing(QC) -> Normalization 
+
+
+# construct matrix after cellranger
+##save gene count matrix as sparse matrix 
+mat <- readMM(file = "matrix.mtx") ##readMM function in pkg(Matrix)
+feature.names = read.delim("features.tsv", header = FALSE, stringsAsFactors = FALSE)
+barcode.names = read.delim("barcodes.tsv", header = FALSE, stringsAsFactors = FALSE) #Cell barcode 
+colnames(mat) = barcode.names $ V1 
+rownames(mat) = feature.names $ V2
+
+#examine selected gene in the first 30 cells 
+mat[c("CD3D", "TCL1A", "MS4A1","VPS13D"), 1:30]
+
+
+# setup Seurat object with the raw data
+sample <- CreateSeuratObject(counts = mat, project = "sample", min.cells = 3, min.features = 100)
+sample
+sample[["RNA"]]@counts
+###pre-processing is done by Yiming 
+
+# QC and selecting cells 
+# The [[ operator can add columns to object metadata. This is a great place to stash QC stats
+sample[["percent.mt"]] <- PercentageFeatureSet(sample, pattern = "^MT-")
+# Show QC metrics for the first 5 cells
+# QC metrics stored in meta.data 
+head(sample@meta.data, 15) ###low quality, dying cells have extensive mitochondrial contamination 
+# Filter 
+# Visualize QC metrics 
+VlnPlot(sample, features = c("nFeature_RNA", "nCount_RNA",  "percent.mt"), ncol=3)
+
+# FeatureScatter is typically used to visualize feature-feature relationships, but can be used
+# for anything calculated by the object, i.e. columns in object metadata, PC scores etc.
+plot1 <- FeatureScatter(sample, feature1 = "nCount_RNA", feature2 = "percent.mt")
+plot2 <- FeatureScatter(sample, feature1 = "nCount_RNA", feature2 = "nFeature_RNA")
+plot1 + plot2
+
+sample<- subset(sample, nFeature_RNA > 200 & nFeature_RNA <2500 & percent.mt <5 )
+#340 cells after filter only 
+
+###Normalization 
+###syntex: 
+# log normalization: 
+# normalizes the feature expression measurements for each cell by the total expression, 
+# multiplies this by a scale factor (10,000 by default), and log-transforms the result.
+# default method
+sample <- NormalizeData(sample, normalization.method="LogNormalize", scale.factor = 10000)
+head(sample[["RNA"]]@data)
+sample[["RNA"]]@counts
+
+# identify highly variable features (features with high cell-to-cell variance (i.e. DEG))
+### focusing on these genes -> biological relevance 
+### vst selection method: https://www.cell.com/cell/fulltext/S0092-8674(19)30559-8?_returnURL=https%3A%2F%2Flinkinghub.elsevier.com%2Fretrieve%2Fpii%2FS0092867419305598%3Fshowall%3Dtrue
+### nfeatures: limit the number of features (i.e. top 2000 in this case)
+sample <- FindVariableFeatures(sample, selection.method = "vst", nfeatures = 2000)
+# Identify the top10 most highly variable genes 
+top10 <- head(VariableFeatures(sample), 10)
+# plot variable features, w/t or w/o labels 
+plot1 <- VariableFeaturePlot(sample) ### without labels 
+plot2 <- LabelPoints(plot=plot1, points = top10, repel = T) ###repel = T to seperate labels from dots 
+plot1 + plot2 
+
+# Scaling the data 
+### standard pre-processing step prior to dimensional reduction techniques like PCA
+### Shifts the expression of each gene, so that the mean expression across cells is 0
+### Scales the expression of each gene, so that the variance across cells is 1
+### This step gives equal weight in downstream analyses, so that highly-expressed genes do not dominate
+##The results of this are stored in pbmc[["RNA"]]@scale.data
+all.genes <- rownames (sample)
+sample <- ScaleData(sample, features = all.genes)
+sample[["RNA"]]@scale.data
+sample[["RNA"]]@data
+
+# dimension reduction by PCA
+## only the previous data  ###limit to variable features by VariableFeatures()
+sample <- RunPCA (sample, features = VariableFeatures(sample))
+
+## Visualization of PCA 
+# Examine and visualize PCA results a few different ways
+###Examine the first 5 PCAs, with 5 genes 
+print(sample[["pca"]], dims= 1:5, nfeatures = 5)# The [[ operator can add columns to object metadata. This is a great place to stash QC stats
+###Visualize top genes associated with reduction components
+### first 2 dimensions, dimension reduction method is pca  
+VizDimLoadings(sample, dims = 1:2, reduction = "pca")
+DimPlot(sample, reduction = "pca") ###each point is a cell 
+###Dimheatmap -> decide which PCA to be included for further analysis 
+###Use heatmap to visualize the 
+DimHeatmap(sample, dims = 1, cells = 500, balanced = TRUE)
+DimHeatmap(sample, dims = 1:30, cells = 500, balanced = TRUE)
+
+#Determine the dimensionality 
+# NOTE: This process can take a long time for big datasets, comment out for expediency. More
+# approximate techniques such as those implemented in ElbowPlot() can be used to reduce
+# computation time
+sample <- JackStraw(sample, num.replicate = 100, dims = 30) #default max dimensions is 20, dims = X to increase dimensionality 
+sample <- ScoreJackStraw(sample, dims = 1:30)
+JackStrawPlot(sample, dims = 1:15) 
+ElbowPlot(sample) #  ranking of principle components based on the percentage of variance explained by each one
+##PCA 1-15 
+
+#Clustering #using the first 30 dimensions 
+sample <- FindNeighbors(sample, dims = 1:15)
+sample <- FindClusters(sample, resolution = 1.2)
+## Look at cluster IDs of the first 5 cells
+head(Idents(sample),5)
+
+#non-linear dimensional reduction 
+#tSNE, UMAP 
+sample<- RunUMAP (sample, dims= 1:15)
+
+# note that you can set `label = TRUE` or use the LabelClusters function to help label
+DimPlot(sample, reduction = "umap", label = T)
+
+
+# Finding cluster biomarkers 
+# find all markers in cluster 2 
+### ident.1 = X , X= cluster of interest 
+### min.pct = X, the min. % of a feature to be dectected 
+cluster2.markers <- FindMarkers(sample, ident.1 = 2, min.pct = 0.25)
+head(cluster2.markers, n=5)
+# find all markers distinguishing cluster 5 from cluster 0 and cluster 3 
+cluster5.markers <- FindMarkers(sample, ident.1 = 5, ident.2 = c(0, 3), min.pct = 0.25)
+head(cluster5.markers, n = 5)
+#find markers for ebery clusters compared with all remaining cells, 
+#report the positive ones only 
+sample.markers <- FindAllMarkers(sample, only.pos = T, min.pct = 0.25, logfc.threshold = 0.25)
+sample.markers %>%
+  group_by(cluster) %>%
+  slice_max(n=2, order_by = avg_log2FC)
+
+# The difference between roc and default? 
+cluster0.markers <- FindMarkers(sample, ident.1 = 0, logfc.threshold = 0.25, test.use = "roc", only.pos = TRUE)
+> cluster.0.1.markers <- FindMarkers(sample, ident.1 = 0, logfc.threshold = 0.25, only.pos = T)
+
+# Visualize markers 
+# Violin plot 
+VlnPlot(sample, features = c("CD68"))
+# raw counts x
+VlnPlot(sample, features = c("CD68"), slot = "counts", log = TRUE)
+FeaturePlot(sample, features = "VSIR")
+### heatmap 
+sample.markers %>% 
+  group_by(cluster) %>%
+  top_n(n=10, wt = avg_log2FC) -> top10
+
+DoHeatmap(sample, features = top10$gene) + NoLegend()
+
+#Assign cell identity to clusters 
+### Use scSorter 
+
+# load annotation file
+library("scSorter")
+anno <- read.csv(file = "tme_annotation.csv", header = TRUE ) #from that paper 
+
+# Identify the 10 most highly variable genes
+topgenes <- head(VariableFeatures(sample), 2000)
+expr = GetAssayData(sample)
+topgene_filter = rowSums(as.matrix(expr)[topgenes, ]!=0) > ncol(expr)*.1
+topgenes = topgenes[topgene_filter]
+
+# At last, we subset the preprocessed expression data. Now, we are ready to run scSorter.
+picked_genes = unique(c(anno$Marker, topgenes))
+expr = expr[rownames(expr) %in% picked_genes, ]
+
+# run scSorter
+rts <- scSorter(expr, anno)
+
+#The cell type assignment results are stored in the Pred_Type vector.
+print(table(rts$Pred_Type))
+
+# add label
+Idents(sample) = rts$Pred_Type
+#Plot for assigned identity of each cluster 
+DimPlot(sample, reduction = "umap", split.by = 'seurat_clusters')
+
+#Another cell identity annotation
+## Automatic annotation 
+# -------------SingleR--------------------------
+library(celldex) #reference 
+library(SingleR) #automatic annotation 
+library(SingleCellExperiment)
+library(scuttle)
+library(ggplot2) 
+library(scater) #for plotting heatmap 
+
+
+# import reference and prepare sample
+ref <- HumanPrimaryCellAtlasData() #summarised experiment object 
+ref
+test <- as.SingleCellExperiment(sample)
+test
+
+# run SingleR
+#test = ur data, ref = ur reference, labels = use the label in your reference 
+predictions <- SingleR(test=test,ref=ref, assay.type.test=1, labels=ref$label.main)
+predictions_sg <- SingleR(test = test, ref = ref, labels = ref$label.main, de.method = "wilcox") #wired "scran" package required, but not mentioned in the tutorial 
+# Summarizing the distribution:
+table(predictions$pruned.labels)
+
+## add to your seuart obj metadata, just need pruned labels 
+sample <- AddMetaData(object = sample, metadata = predictions@listData$pruned.labels, col.name = 'cell_type')
+Idents(sample) = predictions@listData$pruned.labels
+DimPlot(sample, reduction = "umap")
+table(predictions@listData$pruned.labels)
+
+## Checking quality of predictions 
+plotScoreHeatmap(predictions)
+plotDeltaDistribution(predictions)
+summary(is.na(predictions$pruned.labels))
+
+all.markers <- metadata(predictions)$de.genes
+test$labels <- predictions$labels
+
+#Hepatocytes related markers 
+# seurat object doesn't work, SingleCellExperiment works
+plotHeatmap(test, order_columns_by = "labels", 
+            features = unique(unlist(all.markers$Hepatocytes))) 
