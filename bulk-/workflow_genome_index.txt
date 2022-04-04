@@ -1,0 +1,34 @@
+#create genome index 
+#stored in reference directory 
+# environment > assembly seq > annotation > STAR to align 
+
+## create environment 
+conda create --name <new env> 
+conda activate <new env> 
+
+##install star 
+conda install -c bioconda star 
+
+## Download assembly sequence (ensembl) #long runtime 
+wget http://ftp.ensembl.org/pub/release-103/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
+## Unzip ###output is .fa
+gunzip Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz  
+
+
+## download annotation 
+wget http://ftp.ensembl.org/pub/release-103/gtf/homo_sapiens/Homo_sapiens.GRCh38.103.gtf.gz
+## Unzip ##output is .gtf
+gunzip homo_sapiens/Homo_sapiens.GRCh38.103.gtf.gz 
+
+## align sequence to annotation with STAR #long runtime  
+## tutorial: https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/03_alignment.html
+STAR --runThreadN 16 \
+--runMode genomeGenerate \
+--genomeDir /home/lymphoid/reference/GRCh38_DNA_primary_assembly_index \
+--genomeFastaFiles /home/lymphoid/reference/Homo_sapiens.GRCh38.dna.primary_assembly.fa \
+--sjdbGTFfile /home/lymphoid/reference/Homo_sapiens.GRCh38.103.gtf \
+--sjdbOverhang 100 
+
+###can use nohup as prefix and & as suffix if need to go out 
+### tail -f nohup.out to check output 
+ 
