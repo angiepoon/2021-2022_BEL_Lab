@@ -1,0 +1,45 @@
+#Doing fastqc to multiple data (bulk RNA seq 20220303) 
+
+#environmnet > pkgs > fastqc > trim 
+
+## environment and pkgs 
+conda create --name 20220303bulkRNAseq
+conda activate 20220303bulkRNAseq
+conda install -c bioconda fastqc
+conda install -c bioconda trim-galore
+
+## fastqc on multiple files with wildcards 
+## input fastq.gz
+fastqc -extract *fastq.gz
+### take a lot of time, shd hav easier way to do simultaneously 
+### try https://hbctraining.github.io/Intro-to-rnaseq-hpc-O2/lessons/02_assessing_quality.html 
+
+## move qc folders into one place 
+## /home/lymphoid/data/SugimuraRR_RNASeq_CPOS-220303-XY-11729a/FastQC/result
+mkdir result
+mv *fastqc result
+## use filezilla to download fastqc_report.html 
+
+
+## triming with trim-galore 
+### user guide: https://github.com/FelixKrueger/TrimGalore/blob/master/Docs/Trim_Galore_User_Guide.md#version-064
+### trim_galore [options] <filenames(s)>
+
+trim_galore -paired NK1_1.fastq.gz NK1_2.fastq.gz #paired seq. 
+# nohup trim_galore -paired -fastqc $1 $2& for all pairs 
+# check output with 
+# tail -f nohup.out 
+
+#try:https://www.biostars.org/p/216905/ 
+### parallel  
+
+# fastqc the trimmed ones 
+mkdir trimmed 
+mv *val* trimmed #move all validated sequence to trimmed dir. 
+nohup fastqc -extract *val*&
+# tail -f nohup.out #^C to quit #kill -9 <PID> to force kill 
+
+mkdir report
+cd report
+cat *trimming_report.txt > /home/lymphoid/data/SugimuraRR_RNASeq_CPOS-220303-XY-11729a/trimmed/report/trim_summary.txt
+mv *fastqc.html trimmed_fastqc/ #use Filezilla to download html 
