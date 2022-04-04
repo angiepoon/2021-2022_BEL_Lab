@@ -1,0 +1,34 @@
+# download data (cpos)
+
+# sftp sever > download > check md5 > unzip with 7zz 
+
+## the password for 20220303 bulk rna seq data 
+sftp hrdc0awxg@odds.cpos.hku.hk
+z78cpx5go7m11 
+
+# download to my directory 
+get -r /data/SugimuraRR_RNASeq_CPOS-220303-XY-11729a /usersdata/<your username>/
+# leave after download 
+exit 
+
+# check md5 
+md5sum SugimuraRR_RNASeq_CPOS-220303-XY-11729a.md5sum > md5.md5 #append to the file 
+md5sum -c md5.md5 #check 
+# SugimuraRR_RNASeq_CPOS-220303-XY-11729a.md5sum: OK
+
+# unzip 
+### download 7zz to sever (one time) 
+cd 
+mkdir app 
+cd app 
+wget https://www.7-zip.org/a/7z2107-linux-x64.tar.xz
+tar xf 7z2107-linux-x64.tar.xz
+
+# then unzip data 
+cd 
+~/app/7zz e SugimuraRR_RNASeq_CPOS-220303-XY-11729a.zip.001
+# password 
+2TVs9F6a
+
+### Done check data 
+
